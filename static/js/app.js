@@ -10,7 +10,7 @@ function isCustomDuration(queryParamDuration) {
         return false;
     }
 
-    return true;
+    return queryParamDuration !== DEFAULT_DURATION_MINUTES;
 }
 
 class TimeKeeperApp {
@@ -31,7 +31,7 @@ class TimeKeeperApp {
         url.searchParams.set('duration', this.duration);
         url.searchParams.set('endTime', this.endTime);
         url.searchParams.set('startTime', this.startTime);
-        window.history.pushState({}, 'Hellow World', url);
+        window.history.pushState({}, '', url);
     }
 
     /**
