@@ -20,6 +20,8 @@ class TimeKeeperApp {
      * @param {number || undefined} duration - Integer in minutes
      */
     constructor(duration) {
+        this.durationChangeCallbacks = [];
+
         this.updateTimekeeperState(duration || DEFAULT_DURATION_MINUTES, isCustomDuration(duration));
         this.updateUrl();
     }
@@ -34,7 +36,7 @@ class TimeKeeperApp {
 
     /**
      * Set the values for the instance's `duration` and `isCustom` properties. Recalculate endTime
-     * and startTime timestamps.
+     * and startTime timestamps. After updating the url, call any callback function in `durationChangeCallbacks`.
      *
      * @param {number} duration - Integer in minutes
      * @param {boolean} isCustom - Indicates whether the duration is custom or not
@@ -45,6 +47,19 @@ class TimeKeeperApp {
         this.endTime = moment().unix();
         this.startTime = this.endTime - (this.duration * window.timeKeeperUtils.CONSTANTS.MINUTES_TO_MILLISECONDS);
         this.updateUrl();
+
+        this.durationChangeCallbacks.forEach((callback) => {
+            callback(this.duration, this.startTime, this.endTime);
+        });
+    }
+
+    /**
+     * Add the callback function to `durationChangeCallbacks`
+     *
+     * @param {function} callback
+     */
+    callbackIfDurationChanged(callback) {
+        this.durationChangeCallbacks.push(callback);
     }
 }
 

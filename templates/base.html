@@ -23,10 +23,19 @@
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/components/navigation-bar.js') }}"></script>
 
     <script>
         const { duration } = window.timeKeeperUtils.parseUrlQueryParams();
         const timeKeeperApp = new TimeKeeperApp(duration);
+
+        const navBar = new window.timeKeeperComponents.Navigation(document.querySelector('#navigation'));
+        navBar.render(window.location.search);
+
+        timeKeeperApp.callbackIfDurationChanged(() => {
+            navBar.render(window.location.search);
+        });
+
         console.log(timeKeeperApp);
     </script>
 {% endblock %}
