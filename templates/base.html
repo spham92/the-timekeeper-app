@@ -15,6 +15,7 @@
 <body>
 {% block body %}
     <div id="navigation"></div>
+    <div id="timekeeper-state-container" class="container mt-3"></div>
 {% endblock %}
 
 {% block js %}
@@ -24,9 +25,10 @@
     <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script src="{{ url_for('static', filename='js/components/navigation-bar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/components/state-display.js') }}"></script>
 
     <script>
-        const { duration } = window.timeKeeperUtils.parseUrlQueryParams();
+        const {duration} = window.timeKeeperUtils.parseUrlQueryParams();
         const timeKeeperApp = new TimeKeeperApp(duration);
 
         const navBar = new window.timeKeeperComponents.Navigation(document.querySelector('#navigation'));
@@ -35,6 +37,9 @@
         timeKeeperApp.callbackIfDurationChanged(() => {
             navBar.render(window.location.search);
         });
+
+        const stateDisplay = new window.timeKeeperComponents.StateDisplay(document.querySelector('#timekeeper-state-container'));
+        stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.isCustom ? 'CUSTOM' : 'DEFAULT');
 
         console.log(timeKeeperApp);
     </script>
