@@ -1,7 +1,10 @@
 const DEFAULT_DURATION_MINUTES = 5;
 
 /**
- * Custom is determined when the value is not null or undefined
+ * There are 2 flows here. First is checking if the type was already
+ * set to `CUSTOM` in previous interactions. If it was not, determined
+ * the value by figuring out whether is not null or undefined or if it
+ * does not match the default
  *
  * @param {number || undefined || null} queryParamDuration
  */
@@ -41,7 +44,7 @@ class TimeKeeperApp {
      */
     updateUrl() {
         const url = new URL(window.location);
-        url.searchParams.set('duration', this.duration);
+        url.searchParams.set('duration', `${this.duration}`);
         url.searchParams.set('endTime', this.endTime);
         url.searchParams.set('startTime', this.startTime);
         window.history.pushState({}, '', url);
