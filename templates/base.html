@@ -33,15 +33,18 @@
 
         const navBar = new window.timeKeeperComponents.Navigation(document.querySelector('#navigation'));
         navBar.render(window.location.search);
-
         timeKeeperApp.callbackIfDurationChanged(() => {
             navBar.render(window.location.search);
         });
 
         const stateDisplay = new window.timeKeeperComponents.StateDisplay(document.querySelector('#timekeeper-state-container'));
         stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.isCustom ? 'CUSTOM' : 'DEFAULT');
-
-        console.log(timeKeeperApp);
+        stateDisplay.callbackIfDurationInputChanged((newDuration) => {
+            timeKeeperApp.updateTimekeeperState(newDuration, true);
+        });
+        timeKeeperApp.callbackIfDurationChanged(() => {
+            stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.isCustom ? 'CUSTOM' : 'DEFAULT');
+        });
     </script>
 {% endblock %}
 

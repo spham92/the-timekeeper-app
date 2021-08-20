@@ -7,7 +7,9 @@ class StateDisplay {
      * @param {object} container - Object returned from document.querySelector
      */
     constructor(container) {
+        this.durationInputChangeCallbacks = [];
         this.container = container;
+        this.inputListener = null;
     }
 
     /**
@@ -60,6 +62,18 @@ class StateDisplay {
             </div>
         `;
         this.container.innerHTML = markup;
+
+        const durationInput = document.querySelector('#duration-input');
+        durationInput.addEventListener('change', (event) => {
+            const newDuration = Number(event.target.value);
+            this.durationInputChangeCallbacks.forEach((callback) => {
+                callback(newDuration);
+            });
+        });
+    }
+
+    callbackIfDurationInputChanged(callback) {
+        this.durationInputChangeCallbacks.push(callback);
     }
 }
 
