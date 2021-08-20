@@ -1,12 +1,22 @@
 window.timeKeeperUtils = window.timeKeeperUtils || {};
 
 window.timeKeeperUtils.CONSTANTS = {
-  MINUTES_TO_SECONDS: 60,
-  SECONDS_TO_MILLISECONDS: 1000,
-  MINUTES_TO_MILLISECONDS: 60000,
+    MINUTES_TO_SECONDS: 60,
+    SECONDS_TO_MILLISECONDS: 1000,
+    MINUTES_TO_MILLISECONDS: 60000,
+    NAV_LINKS: [{
+        path: 'screenA',
+        title: 'Screen A'
+    }, {
+        path: 'screenB',
+        title: 'Screen B'
+    }, {
+        path: 'screenC',
+        title: 'Screen C'
+    }]
 };
 
-window.timeKeeperUtils.parseUrlQueryParams = function() {
+window.timeKeeperUtils.parseUrlQueryParams = function () {
     const queryParamString = window.location.search;
     let duration;
     let startTime;

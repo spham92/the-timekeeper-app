@@ -15,6 +15,7 @@
 <body>
 {% block body %}
     <div id="navigation"></div>
+    <div id="screen-title-container" class="container mt-3"></div>
     <div id="timekeeper-state-container" class="container mt-3"></div>
 {% endblock %}
 
@@ -26,17 +27,20 @@
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script src="{{ url_for('static', filename='js/components/navigation-bar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/components/state-display.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/components/screen-title.js') }}"></script>
 
     <script>
         const {duration} = window.timeKeeperUtils.parseUrlQueryParams();
         const timeKeeperApp = new TimeKeeperApp(duration);
 
-        const navBar = new window.timeKeeperComponents.Navigation(document.querySelector('#navigation'));
+        // Navbar
+        const navBar = new window.timeKeeperComponents.Navigation(document.querySelector('#navigation'), window.timeKeeperUtils.CONSTANTS.NAV_LINKS);
         navBar.render(window.location.search);
         timeKeeperApp.callbackIfDurationChanged(() => {
             navBar.render(window.location.search);
         });
 
+        // State Display
         const stateDisplay = new window.timeKeeperComponents.StateDisplay(document.querySelector('#timekeeper-state-container'));
         stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.durationType);
         stateDisplay.callbackIfDurationInputChanged((newDuration) => {
@@ -45,6 +49,10 @@
         timeKeeperApp.callbackIfDurationChanged(() => {
             stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.durationType);
         });
+
+        // Screen Title
+        const screenTitle = new window.timeKeeperComponents.ScreenTitle(document.querySelector('#screen-title-container'),  window.timeKeeperUtils.CONSTANTS.NAV_LINKS);
+        screenTitle.render();
     </script>
 {% endblock %}
 

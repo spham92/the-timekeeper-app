@@ -17,9 +17,11 @@ class Navigation {
      * Keep track of the container
      *
      * @param {object} container - Object returned from document.querySelector
+     * @param {{path: string, title: string}[]} navLinks - Used to generate the links in the navigation bar
      */
-    constructor(container) {
+    constructor(container, navLinks) {
         this.container = container;
+        this.navLinks = navLinks;
     }
 
     /**
@@ -28,7 +30,7 @@ class Navigation {
      * @param {string} querySearchString - Append this to the href links. Expected to contain `?`
      */
     render(querySearchString) {
-        const navItems = navLinks.map((navItem) => {
+        const navItems = this.navLinks.map((navItem) => {
             const {path, title} = navItem;
             const activeClass = window.location.pathname.includes(path) ? ' active' : '';
             return `
