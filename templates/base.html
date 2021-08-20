@@ -38,12 +38,12 @@
         });
 
         const stateDisplay = new window.timeKeeperComponents.StateDisplay(document.querySelector('#timekeeper-state-container'));
-        stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.isCustom ? 'CUSTOM' : 'DEFAULT');
+        stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.durationType);
         stateDisplay.callbackIfDurationInputChanged((newDuration) => {
-            timeKeeperApp.updateTimekeeperState(newDuration, true);
+            timeKeeperApp.updateTimekeeperState(newDuration, 'CUSTOM');
         });
         timeKeeperApp.callbackIfDurationChanged(() => {
-            stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.isCustom ? 'CUSTOM' : 'DEFAULT');
+            stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.durationType);
         });
     </script>
 {% endblock %}

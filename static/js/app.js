@@ -5,12 +5,23 @@ const DEFAULT_DURATION_MINUTES = 5;
  *
  * @param {number || undefined || null} queryParamDuration
  */
-function isCustomDuration(queryParamDuration) {
-    if (queryParamDuration === undefined || queryParamDuration === null) {
-        return false;
+function initializeDurationType(queryParamDuration) {
+    const storedDurationType = window.sessionStorage.getItem('durationType');
+
+    // If CUSTOM has been set in previous interactions, continue to use CUSTOM
+    if (storedDurationType && storedDurationType !== 'DEFAULT') {
+        return 'CUSTOM';
     }
 
-    return queryParamDuration !== DEFAULT_DURATION_MINUTES;
+    if (queryParamDuration === undefined || queryParamDuration === null) {
+        return 'DEFAULT';
+    }
+
+    if (queryParamDuration !== DEFAULT_DURATION_MINUTES) {
+        return 'CUSTOM';
+    } else {
+        return 'DEFAULT';
+    }
 }
 
 class TimeKeeperApp {
@@ -21,11 +32,13 @@ class TimeKeeperApp {
      */
     constructor(duration) {
         this.durationChangeCallbacks = [];
-
-        this.updateTimekeeperState(duration || DEFAULT_DURATION_MINUTES, isCustomDuration(duration));
+        this.updateTimekeeperState(duration || DEFAULT_DURATION_MINUTES, initializeDurationType(duration));
         this.updateUrl();
     }
 
+    /**
+     * Sync the URL with the state of the class `duration`, `endTime`, and `startTime` values
+     */
     updateUrl() {
         const url = new URL(window.location);
         url.searchParams.set('duration', this.duration);
@@ -39,18 +52,23 @@ class TimeKeeperApp {
      * and startTime timestamps. After updating the url, call any callback function in `durationChangeCallbacks`.
      *
      * @param {number} duration - Integer in minutes
-     * @param {boolean} isCustom - Indicates whether the duration is custom or not
+     * @param {string} durationType - Either DEFAULT or CUSTOM
      */
-    updateTimekeeperState(duration, isCustom) {
+    updateTimekeeperState(duration, durationType) {
         this.duration = duration;
-        this.isCustom = isCustom;
+        this.durationType = durationType;
         this.endTime = moment().unix();
         this.startTime = this.endTime - (this.duration * window.timeKeeperUtils.CONSTANTS.MINUTES_TO_MILLISECONDS);
         this.updateUrl();
+        this.persistToStorage();
 
         this.durationChangeCallbacks.forEach((callback) => {
             callback(this.duration, this.startTime, this.endTime);
         });
+    }
+
+    persistToStorage() {
+        window.sessionStorage.setItem('durationType', this.durationType);
     }
 
     /**
