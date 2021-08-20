@@ -9,7 +9,6 @@ class StateDisplay {
     constructor(container) {
         this.durationInputChangeCallbacks = [];
         this.container = container;
-        this.inputListener = null;
     }
 
     /**
