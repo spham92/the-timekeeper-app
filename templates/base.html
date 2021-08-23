@@ -30,8 +30,7 @@
     <script src="{{ url_for('static', filename='js/components/screen-title.js') }}"></script>
 
     <script>
-        const {duration} = window.timeKeeperUtils.parseUrlQueryParams();
-        const timeKeeperApp = new TimeKeeperApp(duration);
+        const timeKeeperApp = new TimeKeeperApp();
 
         // Navbar
         const navBar = new window.timeKeeperComponents.Navigation(document.querySelector('#navigation'), window.timeKeeperUtils.CONSTANTS.NAV_LINKS);
@@ -45,9 +44,10 @@
         stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.durationType);
         stateDisplay.callbackIfDurationInputChanged((newDuration) => {
             timeKeeperApp.updateTimekeeperState(newDuration, 'CUSTOM');
+            timeKeeperApp.updateUrl();
         });
-        timeKeeperApp.callbackIfDurationChanged(() => {
-            stateDisplay.render(timeKeeperApp.duration, timeKeeperApp.startTime, timeKeeperApp.endTime, timeKeeperApp.durationType);
+        timeKeeperApp.callbackIfDurationChanged((duration, startTime, endTime, durationType) => {
+            stateDisplay.render(duration, startTime, endTime, durationType);
         });
 
         // Screen Title
